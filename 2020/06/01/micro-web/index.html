@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    micro-web |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-micro-web" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      micro-web
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2020/06/01/micro-web/" class="article-date">
+  <time datetime="2020-06-01T08:14:33.000Z" itemprop="datePublished">2020-06-01</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Technology/">前端工具人</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <h2 id="微前端背景"><a href="#微前端背景" class="headerlink" title="微前端背景"></a>微前端背景</h2><p>对于公司内部管理系统、ToB的SaaS系统等一系列的项目中，由于项目本身的生命周期较长，又长期不断的迭代，加入新的功能模块，最终会导致项目本身的体积越来越大，结构越来越复杂。不但影响了日后的维护成本、性能等方面，而且对于开发来讲，也是越写越写不下去，最后的建议可能就是 Emm… 你懂的。</p>
+<a id="more"></a>
+<p>微前端的概念很早就有了，比如说早期的iframe。但对于现在前端的技术的不断发展出现很多优秀的微前端解决方案，比如<strong><a href="https://single-spa.js.org/" target="_blank" rel="noopener">single-spa</a></strong>、蚂蚁的<strong><a href="https://qiankun.umijs.org/zh/" target="_blank" rel="noopener">qiankun</a></strong>。有兴趣可以了解下。</p>
+<h2 id="实现方案"><a href="#实现方案" class="headerlink" title="实现方案"></a>实现方案</h2><p>本文所介绍的微前端是基于Vue的路由预加载的方式实现的，具体架构及流程参考下图：<br><img src="https://user-gold-cdn.xitu.io/2020/5/16/1721bae915589c5d?w=1539&h=844&f=png&s=150604" alt="实现流程"></p>
+<h2 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h2><h4 id="子项目"><a href="#子项目" class="headerlink" title="子项目"></a>子项目</h4><p>通过Vue全家桶来构建子项目</p>
+<ul>
+<li>规范子项目命名、端口号，在后续的代理、路由命名都以子模块的名字为准<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; package.json</span><br><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;: &quot;mobile-wechat&quot;,</span><br><span class="line">    &quot;devPort&quot;: 10011,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>调整目录结构，由于子项目依赖于主项目，所以可以将pubic文件夹删掉，最终大致目录结构如下</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">├── src              </span><br><span class="line">│   ├── views</span><br><span class="line">│   ├── router</span><br><span class="line">│   ├── main.js</span><br><span class="line">├── babel.config.js          </span><br><span class="line">├── vue.config.js      </span><br><span class="line">├── .env.dev       </span><br><span class="line">├── .env.production </span><br><span class="line">├── .env.test</span><br></pre></td></tr></table></figure>
+<ul>
+<li>调整之后配置config文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; vue.config.js</span><br><span class="line"></span><br><span class="line">const APP_NAME &#x3D; require(&#39;.&#x2F;package.json&#39;).name; &#x2F;&#x2F; 定义项目名</span><br><span class="line">const PORT &#x3D; require(&#39;.&#x2F;package.json&#39;).devPort;</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">  publicPath: &#96;&#x2F;$&#123;APP_NAME&#125;&#x2F;&#96;,</span><br><span class="line">  chainWebpack: (config) &#x3D;&gt; &#123;</span><br><span class="line">    config.externals(&#123;</span><br><span class="line">      &#39;vue&#39;: &#39;Vue&#39;</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    config.output</span><br><span class="line">      .filename(&#39;main.js&#39;)</span><br><span class="line">      .chunkFilename(&#39;[name].[chunkhash:8].js&#39;)</span><br><span class="line">      .jsonpFunction(&#96;webpackJsonp-$&#123;APP_NAME&#125;&#96;)</span><br><span class="line">      .library(&#96;app-$&#123;APP_NAME&#125;&#96;)</span><br><span class="line">      .libraryExport(&#39;default&#39;)</span><br><span class="line">      .libraryTarget(&#39;umd&#39;)</span><br><span class="line"></span><br><span class="line">    config.plugin(&#39;define&#39;).use(webpack.DefinePlugin, [&#123;</span><br><span class="line">      &#39;process.env.VUE_APP_NAME&#39;: JSON.stringify(APP_NAME)</span><br><span class="line">    &#125;])</span><br><span class="line"></span><br><span class="line">    config.plugins</span><br><span class="line">      .delete(&#39;html&#39;)</span><br><span class="line">      .delete(&#39;preload&#39;)</span><br><span class="line">      .delete(&#39;prefetch&#39;)</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  devServer: &#123;</span><br><span class="line">    port: PORT,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置好config后，在入口文件中，将定义的路由表挂载到Vue上，并将路由整理成以下格式，方便管理。</li>
+</ul>
+<p><img src="https://user-gold-cdn.xitu.io/2020/5/16/1721c524e51d08da?w=654&h=177&f=png&s=15712" alt="子项目路由"><br>代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">import Vue from &#39;vue&#39;</span><br><span class="line">import router from &#39;.&#x2F;router&#39;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 定义__shareRouter__属性用来存放路由信息</span><br><span class="line">const shareRouter &#x3D; (Vue.__shareRouter__ &#x3D; Vue.__shareRouter__ || &#123;&#125;)</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 将router定义到属性上</span><br><span class="line">shareRouter[process.env.VUE_APP_NAME] &#x3D; router</span><br></pre></td></tr></table></figure>
+<p>最后启动项目</p>
+<h4 id="主项目"><a href="#主项目" class="headerlink" title="主项目"></a>主项目</h4><ul>
+<li>首先通过webpack将子项目的入口文件打包到主项目中并且在主项目入口文件之前，可以通过<br><code>insert-script-webpack-plugin</code>插件来实现<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; webpack.config.base.js</span><br><span class="line"></span><br><span class="line">const InsertScriptWebpackPlugin  &#x3D; require(&#39;insert-script-webpack-plugin&#39;);</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">    &#x2F;&#x2F; ...</span><br><span class="line">    plugins: [</span><br><span class="line">        &#x2F;&#x2F; ...</span><br><span class="line">        new InsertScriptWebpackPlugin(&#123;</span><br><span class="line">            paths: [&#39;&#x2F;mobile-crm&#x2F;main.js&#39;, &#39;&#x2F;mobile-wechat&#x2F;main.js&#39;]</span><br><span class="line">        &#125;),</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>开发环境配置代理，生产环境可以通过Nginx实现代理，加载子项目的入口文件</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; webpack.config.dev.js</span><br><span class="line"></span><br><span class="line">const PROXY &#x3D; &#123;</span><br><span class="line">    &#39;&#x2F;mobile-crm&#x2F;&#39;: &#123;</span><br><span class="line">      target: &#39;http:&#x2F;&#x2F;127.0.0.1:10011&#x2F;&#39;</span><br><span class="line">    &#125;,</span><br><span class="line">    &#39;&#x2F;mobile-wechat&#x2F;&#39;: &#123;</span><br><span class="line">        target: &#39;http:&#x2F;&#x2F;127.0.0.1:10012&#x2F;&#39;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在主项目的路由文件中拦截子项目路由，并添加到主项目路由表中</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">import Vue from &#39;vue&#39;;</span><br><span class="line">import Router from &#39;vue-router&#39;;</span><br><span class="line">import routes from &#39;.&#x2F;routes&#x2F;index&#39;;</span><br><span class="line"></span><br><span class="line">Vue.use(Router);</span><br><span class="line"></span><br><span class="line">const routes_crm &#x3D; Vue.__shareRouter__</span><br><span class="line"></span><br><span class="line">routes &#x3D; Object.values(routes_crm).reduce((acc, prev) &#x3D;&gt;&#123;</span><br><span class="line">    &#x2F;&#x2F; 将子项目路由注册到 主项目router-view中</span><br><span class="line">    const b &#x3D; &#123;</span><br><span class="line">        path: &#39;&#x2F;&#39;,</span><br><span class="line">        component: () &#x3D;&gt; import(&#39;@&#x2F;views&#x2F;index.vue&#39;),</span><br><span class="line">        children: [...prev]</span><br><span class="line">    &#125;</span><br><span class="line">    return  acc.concat(b)</span><br><span class="line">&#125;, routes)</span><br><span class="line"></span><br><span class="line">const router &#x3D; new Router(&#123;</span><br><span class="line">    routes,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>启动项目可以看到，主项目已经可以加载子项目的main.js文件了。</p>
+<h2 id="注意的问题"><a href="#注意的问题" class="headerlink" title="注意的问题"></a>注意的问题</h2><ul>
+<li>要确保资源加载顺序，需要优先加载共同依赖的资源-&gt;子模块-&gt;父模块。</li>
+<li>需要保证同一前端框架。</li>
+<li>如果<code>router</code>的模式为 <code>history</code>，需要服务端配置，将代理资源文件类型限制在<code>js/css/image</code>等类型，而非<code>html</code>。并设置不能缓存入口文件，具体配置如下:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">location ~ \&#x2F;mobile-crm\&#x2F;(.+\.js)$ &#123;</span><br><span class="line">    if ( $request_uri &#x3D; &#x2F;mobile-crm&#x2F;main.js )&#123;</span><br><span class="line">        add_header Cache-Control no-cache;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://yoursite.com/2020/06/01/micro-web/" data-id="ckaxb50ix00024wum53e1dp8g" class="article-share-link">
+                                            Share
+                                        </a>
+                                        
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/05/29/hello-world/" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">Hello World</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 Hexo</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">show</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/categories">分类</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>
