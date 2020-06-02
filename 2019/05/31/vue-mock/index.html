@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    vue-cli项目中使用mockjs |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-vue-mock" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      vue-cli项目中使用mockjs
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2019/05/31/vue-mock/" class="article-date">
+  <time datetime="2019-05-31T12:28:33.000Z" itemprop="datePublished">2019-05-31</time>
+</a>
+                            
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><p>在前后端分离项目中尤其是项目初期，前端人员可以通过模拟服务端接口数据，在本地搭建一个JSON服务，从而不依赖后端API进行开发。那么我们可以通过以下两个插件来实现 <a href="https://github.com/typicode/json-server" target="_blank" rel="noopener">json-server</a> 、 <a href="https://github.com/nuysoft/Mock/wiki/Getting-Started" target="_blank" rel="noopener">mockjs</a></p>
+<a id="more"></a>
+<blockquote>
+<p>顾名思义就是存放json的server</p>
+</blockquote>
+<h4 id="首先在项目中安装依赖"><a href="#首先在项目中安装依赖" class="headerlink" title="首先在项目中安装依赖"></a>首先在项目中安装依赖</h4><p><code>npm i json-server mockjs -D</code></p>
+<h4 id="在项目根目录创建mock文件夹，新建db-js、routes-js、server-js。新建modules文件夹存放json文件，当然我们可以通过js生成json"><a href="#在项目根目录创建mock文件夹，新建db-js、routes-js、server-js。新建modules文件夹存放json文件，当然我们可以通过js生成json" class="headerlink" title="在项目根目录创建mock文件夹，新建db.js、routes.js、server.js。新建modules文件夹存放json文件，当然我们可以通过js生成json"></a>在项目根目录创建mock文件夹，新建<code>db.js</code>、<code>routes.js</code>、<code>server.js</code>。新建modules文件夹存放json文件，当然我们可以通过<code>js</code>生成<code>json</code></h4><p>目录结构为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">├── mock               &#x2F;&#x2F; mock</span><br><span class="line">│   ├── modules</span><br><span class="line">│   │   └── user.js</span><br><span class="line">│   ├── db.js</span><br><span class="line">│   ├── routes.js</span><br><span class="line">│   ├── server.js</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>话不多说，直接上代码…</p>
+</blockquote>
+<p><code>server.js</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">const jsonServer &#x3D; require(&#39;json-server&#39;);</span><br><span class="line">const db &#x3D; require(&#39;.&#x2F;db.js&#39;);</span><br><span class="line">const routes &#x3D; require(&#39;.&#x2F;routes.js&#39;);</span><br><span class="line"></span><br><span class="line">const port &#x3D; 3000;</span><br><span class="line"></span><br><span class="line">const server &#x3D; jsonServer.create();</span><br><span class="line">const router &#x3D; jsonServer.router(db);</span><br><span class="line">const middlewares &#x3D; jsonServer.defaults();</span><br><span class="line">const rewriter &#x3D; jsonServer.rewriter(routes);</span><br><span class="line"></span><br><span class="line">server.use(middlewares);</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 將 POST 請求轉為 GET</span><br><span class="line">server.use((request, res, next) &#x3D;&gt; &#123;</span><br><span class="line">    request.method &#x3D; &#39;GET&#39;;</span><br><span class="line">    next();</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.use(rewriter)  &#x2F;&#x2F; 注意：rewriter 的設定一定要在 router 設定之前</span><br><span class="line">server.use(router)</span><br><span class="line"></span><br><span class="line">server.listen(port, () &#x3D;&gt; &#123;</span><br><span class="line">    console.log(&#96;open mock server at http:&#x2F;&#x2F;localhost:$&#123;port&#125;&#96;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p><code>db.js</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const user &#x3D; require(&#39;.&#x2F;modules&#x2F;user&#39;)</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">    user: user.userInfo,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>routes.js</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">const routes &#x3D; &#123;</span><br><span class="line">    &#39;&#x2F;user&#x2F;userInfo&#39;: &#39;&#x2F;user&#39;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; routes;</span><br></pre></td></tr></table></figure>
+
+<p><code>user.js</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">const Mock &#x3D; require(&#39;mockjs&#39;);</span><br><span class="line"></span><br><span class="line">function user() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">        user: Mock.mock(&#123;</span><br><span class="line">            &quot;code&quot;: 200,</span><br><span class="line">            &quot;data&quot;: &#123;</span><br><span class="line">                &quot;userid&quot;: &quot;@id()&quot;,</span><br><span class="line">                &quot;username&quot;: &quot;@cname()&quot;,</span><br><span class="line">                &quot;date&quot;: &quot;@date()&quot;,</span><br><span class="line">                &quot;avatar&quot;: &quot;@image(&#39;200x200&#39;,&#39;red&#39;,&#39;#fff&#39;,&#39;avatar&#39;)&quot;,</span><br><span class="line">                &quot;description&quot;: &quot;@paragraph()&quot;,</span><br><span class="line">                &quot;ip&quot;: &quot;@ip()&quot;,</span><br><span class="line">                &quot;email&quot;: &quot;@email()&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">    userInfo: user()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="设置本地代理"><a href="#设置本地代理" class="headerlink" title="设置本地代理"></a>设置本地代理</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">module.exports &#x3D; &#123;</span><br><span class="line">    appPort: 9005,</span><br><span class="line">    proxy: &#123;</span><br><span class="line">        &#39;&#x2F;api&#39;: &#123;</span><br><span class="line">            target: &#39;http:&#x2F;&#x2F;localhost:3000&#39;,</span><br><span class="line">            secure: false,  &#x2F;&#x2F; 默认true情况下，不接受运行在 HTTPS 上，且使用了无效证书的后端服务器</span><br><span class="line">            &#x2F;&#x2F; changeOrigin 的意思就是把 http 请求中的 Origin 字段进行变换，在浏览器接收到后端回复的时候，浏览器会以为这是本地请求，而在后端那边会以为是在站内的调用。</span><br><span class="line">            changeOrigin: true, &#x2F;&#x2F; 默认false，是否需要改变原始主机头为目标URL</span><br><span class="line">            pathRewrite: &#123;</span><br><span class="line">                &#39;^&#x2F;api&#39;: &#39;&#39;,</span><br><span class="line">            &#125;,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="由于我们需要同时启动两个服务，所以我们需要借助concurrently插件，安装依赖"><a href="#由于我们需要同时启动两个服务，所以我们需要借助concurrently插件，安装依赖" class="headerlink" title="由于我们需要同时启动两个服务，所以我们需要借助concurrently插件，安装依赖"></a>由于我们需要同时启动两个服务，所以我们需要借助<code>concurrently</code>插件，安装依赖</h4><p><code>npm i concurrently -D</code></p>
+<h4 id="最后我们在package-json加入以下命令。输入npm-run-mock-dev就可以启动项目啦"><a href="#最后我们在package-json加入以下命令。输入npm-run-mock-dev就可以启动项目啦" class="headerlink" title="最后我们在package.json加入以下命令。输入npm run mock-dev就可以启动项目啦"></a>最后我们在<code>package.json</code>加入以下命令。输入<code>npm run mock-dev</code>就可以启动项目啦</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;mock-server&quot;: &quot;node .&#x2F;mock&#x2F;server.js&quot;,</span><br><span class="line">    &quot;mock-dev&quot;: &quot;concurrently \&quot;npm run dev\&quot; \&quot;npm run mock-server\&quot;&quot;</span><br><span class="line">  &#125;,</span><br></pre></td></tr></table></figure>
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://yoursite.com/2019/05/31/vue-mock/" data-id="ckaxunfx30002usum7mx4a1m1" class="article-share-link">
+                                            Share
+                                        </a>
+                                        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/json-server%E3%80%81mock%E3%80%81mockjs%E3%80%81vue-cli/" rel="tag">json-server、mock、mockjs、vue-cli</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2019/07/17/project-config/" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            项目配置相关 -- 跨域、多个环境问题
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/01/24/vue-problem/" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">项目遇到的问题总结</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 Hexo</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/categories">分类</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>

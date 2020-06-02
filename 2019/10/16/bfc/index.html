@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    BFC（块级格式上下文） |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-bfc" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      BFC（块级格式上下文）
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2019/10/16/bfc/" class="article-date">
+  <time datetime="2019-10-16T04:28:33.000Z" itemprop="datePublished">2019-10-16</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Technology/">前端工具人</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <h3 id="块级格式上下文"><a href="#块级格式上下文" class="headerlink" title="块级格式上下文"></a>块级格式上下文</h3><blockquote>
+<p>BFC（Block Formatting Context）是网页中独立的渲染区域，它规定了内部元素的布局环境，与页面其他内容分隔开来，一般通过脱离常规流来创建（float、absolute、fixed）。而根元素，本身就是承载元素的容器，脱离了常规流，为整个文档创建了一个块级格式上下文环境。</p>
+</blockquote>
+<a id="more"></a>
+<h3 id="它通常通过以下方式来创建"><a href="#它通常通过以下方式来创建" class="headerlink" title="它通常通过以下方式来创建"></a>它通常通过以下方式来创建</h3><ul>
+<li>float</li>
+<li>定位（absolute、fixed）</li>
+<li>inline-block</li>
+<li>table-cell</li>
+<li>table-caption</li>
+<li>flex 或者 inline-flex</li>
+<li>overflow（值不为visible）</li>
+<li>flow-root  新的display值，可以创建无副作用的BFC</li>
+</ul>
+<h3 id="BFC布局规则"><a href="#BFC布局规则" class="headerlink" title="BFC布局规则"></a>BFC布局规则</h3><ul>
+<li>块级元素垂直排列</li>
+<li>行内元素水平排列</li>
+<li>在同一BFC内相邻两个块级元素的垂直方向margin会发生重叠</li>
+<li>浮动定位和清除浮动只能发生在同一BFC中，并且不会影响其他BFC内的布局</li>
+</ul>
+<h3 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h3><h4 id="解决外边距重叠"><a href="#解决外边距重叠" class="headerlink" title="解决外边距重叠"></a>解决外边距重叠</h4><ul>
+<li>对于父子元素，如果父元素没有BFC特性，这对外边距会发生重叠，子元素的上边距会“溢出”到父元素外边(注：p标签不属于盒模型)</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"background: pink;"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"margin: 20px;background: lavender;"</span>&gt;</span>模块1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"background: yellow "</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"margin: 20px;background: lavender;"</span>&gt;</span>模块1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="期望效果"><a href="#期望效果" class="headerlink" title="期望效果"></a>期望效果</h5><div>
+  <div style="background: pink;display: flow-root">
+    <div style="margin: 20px;background: lavender;">模块1</div>
+  </div>
+  <div style="background: yellow ;display: flow-root">
+    <div style="margin: 20px;background: lavender;">模块1</div>
+  </div>
+</div>
+
+<h5 id="实际效果"><a href="#实际效果" class="headerlink" title="实际效果"></a>实际效果</h5><div>
+  <div style="background: pink;">
+    <div style="margin: 20px;background: lavender ;">模块1</div>
+  </div>
+  <div style="background: yellow ">
+    <div style="margin: 20px;background: lavender ;">模块1</div>
+  </div>
+</div>
+
+<ul>
+<li>相邻元素之间会发生上下边距的重叠</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"margin: 20px;background: lavender;"</span>&gt;</span>模块1<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"margin: 20px;background: lavender;"</span>&gt;</span>模块2<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<br/>
+
+<h5 id="期望效果-1"><a href="#期望效果-1" class="headerlink" title="期望效果"></a>期望效果</h5><div style="background: pink;display: flow-root">
+  <div style="margin: 20px;background: lavender;">模块1</div>
+  <div style="margin: 20px;background: lavender;overflow:hidden">模块2</div>
+</div>
+
+<h5 id="实际效果-1"><a href="#实际效果-1" class="headerlink" title="实际效果"></a>实际效果</h5><div style="background: yellow ">
+  <div style="margin: 20px;background: lavender;">模块1</div>
+  <div style="margin: 20px;background: lavender;">模块2</div>
+</div>
+
+<p>以上我们都可以通过<code>display:flow-root</code>来给父级元素创建成BFC，实现所期望的效果</p>
+<h4 id="浮动导致父元素高度塌陷"><a href="#浮动导致父元素高度塌陷" class="headerlink" title="浮动导致父元素高度塌陷"></a>浮动导致父元素高度塌陷</h4><p>一般的子元素发生浮动时，子元素脱离常规流，父元素的高度撑不起来，导致高度塌陷。一般的我们通常通过<code>chear:both</code>或者添加伪元素来清除浮动。另外我们可以通过BFC特性来解决</p>
+<div style="display: flow-root">
+  <div style="border: 4px yellow  solid">
+    <div style="width: 100px;height: 100px;background: pink;float:left;color: #fff; line-height: 100px;text-align:center">Float</div>
+    <p>这是浮动元素的同级文案</p>
+  </div>
+</div>
+
+<br/>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"border: 4px yellow  solid"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"width: 100px;</span></span></span><br><span class="line"><span class="tag"><span class="string">    height: 100px;</span></span></span><br><span class="line"><span class="tag"><span class="string">    background: pink;</span></span></span><br><span class="line"><span class="tag"><span class="string">    float:left;</span></span></span><br><span class="line"><span class="tag"><span class="string">    color: #fff;</span></span></span><br><span class="line"><span class="tag"><span class="string">    line-height: 100px;</span></span></span><br><span class="line"><span class="tag"><span class="string">    text-align:center"</span>&gt;</span>Float<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>这是浮动元素的同级文案<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>为父级元素添加<code>overflow</code>或<code>display:flow-root</code>来创建BFC，让他来包含所有子元素</p>
+<br/>
+
+<div style="border: 4px yellow  solid; display: flow-root">
+  <div style="width: 100px;height: 100px;background: pink;float:left;color: #fff; line-height: 100px;text-align:center">Float</div>
+  <p>这是浮动元素的同级文案</p>
+</div>
+
+<h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Block_formatting_context" target="_blank" rel="noopener">Block formatting context</a><br><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Box_Model/Mastering_margin_collapsing" target="_blank" rel="noopener">Mastering margin collapsing</a></p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://yoursite.com/2019/10/16/bfc/" data-id="ckaxunfws0000usumgk4vgwow" class="article-share-link">
+                                            Share
+                                        </a>
+                                        
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS-BFC/" rel="tag">CSS BFC</a></li></ul>
+
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+      <a href="/2020/06/01/micro-web/" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            micro-web
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2019/07/17/project-config/" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">项目配置相关 -- 跨域、多个环境问题</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 Hexo</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/categories">分类</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>
