@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    第一章 什么是JavaScript? |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-YDK-JS-2nd-01" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      第一章 什么是JavaScript?
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2020/06/02/YDK-JS-2nd-01/" class="article-date">
+  <time datetime="2020-06-02T11:43:51.000Z" itemprop="datePublished">2020-06-02</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Ydk-js-2nd/">You Don't Know JS系列</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <p>&emsp;&emsp;跟很多开发者一样，我们都不能完完全全的理解JS。也并不曾主动去了解。那么就是现在，让我们一起去学习JS更多的内容。</p>
+<p>&emsp;&emsp;在You Don’t Know JS Yet (YDKJSY)系列文章的第一章中，我们需要花些时间为未来的学习巩固下基础。我们首先需要涵盖很多背景知识及细节，弄清楚关于这门语言（是or不是）的偏见。</p>
+<p>&emsp;&emsp;这对于深刻理解JS是如何组织、维护的本质与过程是有帮助的，所有的JS开发者都应该理解，如果你想深入了解JS，这里将是学习JS旅程的第一步。</p>
+<a id="more"></a>
+<h3 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h3><p>&emsp;&emsp;我之所以强调旅程这个词是因为，学习JS是没有终点的，那么本书将是一个帮助你学习JS的一个方向，不论你花费多少时间学习这门语言，你都将会或多或少的学习和理解一些知识。所以不要指望这本书能让你快速成手。相反的，耐心和毅力是你学习旅程上最好的开始。</p>
+<p>&emsp;&emsp;在本章节中，你可以了解到在本书（YDKJS）剩余部分关于深入挖掘和学习JS知识导图。</p>
+<p>&emsp;&emsp;特别是第四章，我们将介绍JS语言中主要的三部分内容：作用域/闭包、原型/对象、类型/强类型。JS是一门广泛、复杂的语言，有许多特性和功能。但是这些都是建立在以上三个部分。<br>本书虽然标题取名为“开始”，但它并不是一个入门书籍。这本书主要是让你开始了解JS更深层次的知识；开始阅读本书前至少保证你对JS已有几个月的经验。</p>
+<p>&emsp;&emsp;即使你已经学习过一段时间的JS，你也不能忽略这本书，希望你能在这上面花费一定的时间。一个好的开始往往取决于你坚实的第一步。</p>
+<h3 id="JavaScript名字由来"><a href="#JavaScript名字由来" class="headerlink" title="JavaScript名字由来"></a>JavaScript名字由来</h3><p>&emsp;&emsp;JavaScript这个名字可能会给很多人带来误解。跟Java有关？又或是Java中的一个Script（脚本）？还是仅仅是一个脚本而不是编程语言。</p>
+<p>&emsp;&emsp;事实上，Javascript这个名字会捎带些营销策略在里面，当Brendan Eich刚开始构造这门语言时，起名叫做Mocha。后来在Netscape內部它被叫做LiveScript，但是最后公开的名字却是Javascript，“Javascript”赢得了最后的竞选。</p>
+<p>&emsp;&emsp;为什么？因为这门语言最初是为了吸引Java开发者，并且对于“脚本”这个词往往带给人们的感觉时轻量。这些轻量的脚本将首次嵌入到浏览器的页面中。</p>
+<p>&emsp;&emsp;换句话说，Javascript的策略是试图利用更具盛名的Java来定位这门语言，就此而言，它也可以简单的称作“WebJava”。在Javascript和Java中存在一定的相似之处，这些相似点并不取决于它们共同的发展，而是针对那些假定期望C（某种程度是C++）语法的开发者的两种语言。例如，我们用{}来分别代表开始代码块和结束代码块，就像C/C++ 和 Java。我们也可以使用 ; 来强调结束语句。</p>
+<p>&emsp;&emsp;在某些方面上，法律。 Oracle (via Sun)拥有“Java”的商标权，而且通过Netscape公司拥有“JavaScript”商标权，只不过从未执行该商标。</p>
+<p>&emsp;&emsp;由于这些原因，一些人建议我们将JS替代Javascript。如果针对这门语言没有一个官方的名字，这将是一个非常合适的简写。那么所有书籍所提到的JS其实都是指这门语言。</p>
+<p>&emsp;&emsp;经过TC39（ECMA的39号技术委员会Technical Committee 39）制定和审核，由ECMA组织发布标准文件，规定了浏览器脚本语言的标准，并将其称ECMAScript。也意味着这门语言于Oracle的品牌关系也渐渐疏离。的确，自2016起，语言的版本修正都是以年份作为后缀；都是以ECMAScript 2019或简写ES2019。</p>
+<p>&emsp;&emsp;换句话说，目前在浏览器或者node.js中运行的Javascript/JS，是ES2019标准的实现。</p>
+<blockquote>
+<p>不要使用诸如“JS6”或“ES8”来指代这门语言。这只会导致混乱。我们应该常用“ES20xx”或只是“JS”来指代。</p>
+</blockquote>
+<p>不论你称它JavaScript, JS, ECMAScript, 或者 ES2019，你都要明确，它跟Java没关系！</p>
+<blockquote>
+<p>“Java is to JavaScript as ham is to hamster.” –Jeremy Keith, 2009</p>
+</blockquote>
+<h3 id="语言规范"><a href="#语言规范" class="headerlink" title="语言规范"></a>语言规范</h3><p>&emsp;&emsp;上文中有提及TC39，管理JS的技术委员会。他们主要负责制定和审核这个语言标准。该委员会定期开会表决同意更改，然后提交给ECMA标准组织。</p>
+<p>&emsp;&emsp;JS的语法及行为规范都定义在ES规格书中。</p>
+<p>&emsp;&emsp;ES2019恰好是JS自1995年诞生以来第10次修订，所以在官方的URL中你会发现“10.0”:<br>&emsp;&emsp;<a href="https://www.ecma-international.org/ecma-262/10.0/" target="_blank" rel="noopener">https://www.ecma-international.org/ecma-262/10.0/</a></p>
+<p>&emsp;&emsp;TC39成员由50~100位来自业内的大公司派出的工程师组成，比如浏览器厂商（火狐、谷歌、苹果）、设备制造商（三星等等）。所有的成员都是以志愿者身份加入。即使如此他们也会从委员会中得到一定的酬劳。</p>
+<p>&emsp;&emsp;TC39每隔一个月将会召开为期3天左右的会议，回顾上次参会成员的工作、讨论问题和对建议书进行表决。会议地点一般都在与会成员的公司内部。</p>
+<p>&emsp;&emsp;所有TC39提议都要经过五个阶段，当然对于我们程序员来讲，就一个阶段！关于这5个阶段，可以参考这个连接<a href="https://tc39.es/process-document/" target="_blank" rel="noopener">https://tc39.es/process-document/</a></p>
+<p>&emsp;&emsp;第一个阶段大致的意思是，某人有了一个好的idea或者plans想加到规范中去。也就是一些开发者在社交媒体或博客文章中提到一些好的想法。然而光有想法是不够的，你必须得到至少一个TC39成员的支持，才算是进入到第一个阶段。</p>
+<p>&emsp;&emsp;如果一个提议已经经过这5个阶段，那么它将加在下一个版本修订中。而这5个阶段往往需要经过几个月甚至一年的时间。</p>
+<p>&emsp;&emsp;所有的提议、讨论、会议记录都是公开的，你可以在<a href="https://github.com/tc39/proposals" target="_blank" rel="noopener">https://github.com/tc39/proposals</a>找到。</p>
+<p>&emsp;&emsp;在整个提议过程中，任何人不管是不是TC39成员，都可以参与公开的讨论和建议。然而只有TC39成员拥有在会议中投票的权力，所以，实际是TC39代表广大开发者门决定JS的发展方向。</p>
+<p>&emsp;&emsp;相反的对于一些非官方建立、虚拟出的一些规范，不必理会。JS标准只有一个。就是由官方TC39和ECMA组织维护管理。</p>
+<p>&emsp;&emsp;早在20年代初，由微软公司模仿JS开发了一种相近的语言叫做“JScript”，似乎是合法的实现另一个版本的JS，但随着时间的推移，这个称法对于现在的JS来说是不正确的。</p>
+<p>&emsp;&emsp;所有的主流浏览器及设备制造商都保证了JS的实现于这一规范。当然运行环境（引擎）的实现并不统一。但是都应该基于V8（Chorme的引擎）或者SpiderMonkey （Mozilla的引擎）。</p>
+<p>&emsp;&emsp;也就是我们学习的JS，在任何支持JS运行的地方都是通用的。</p>
+<h3 id="JS在Web中的规则"><a href="#JS在Web中的规则" class="headerlink" title="JS在Web中的规则"></a>JS在Web中的规则</h3><p>&emsp;&emsp;随着JS运行环境的不断扩大（从浏览器到服务端（Node.js），到人工智能、到…），其中一个环境就是Web，那么JS是如何在web浏览器中运行的，就成了在所有实例应用中，唯一切合实际的问题。</p>
+<p>&emsp;&emsp;在大多情况下，规范中定义的JS和运行在基于浏览器的Javascript引擎中的JS是一样的，但不能保证存在一定的差异性，这是我们要考虑的。</p>
+<p>&emsp;&emsp;有时JS规范会决定一些新的行为规范，然而，它并不能保证这些新规范能在JS引擎中正常工作。JS引擎已经对JS规范依赖有20年以上的时间，并依赖于Web内容。所以，JS引擎会拒绝一些破坏Web内容的提议。</p>
+<p>&emsp;&emsp;在这种情况下，TC39通常通过回溯选择简单符合规范的提议，例如，TC39想要在数组中加入contains(..)方法，但是他们发现这个名字与老版本中的一些JS框架存在冲突，所以他们就将名字修改位includes(..)。类似这种充满戏剧性的命名冲突还有flat(..)，它最开始的名字叫做flatten(..)，这种情况在JS社区中被称作“冒牌？？”。</p>
+<p>&emsp;&emsp;但是，TC39偶尔会通过某些提议，虽然对于JS引擎可能永远不会去做这个规范。</p>
+<p>&emsp;&emsp;解决方案，在附录B中提到，给Web浏览器提供可拓展的ECMAScript特性。附录详细描述了任何已知在官方JS规范中不适合实际Web环境的情况，换句话说这个附录仅仅给web JS提供了一个免责条款，而其他环境下的JS需严格按着规范执行。</p>
+<p>&emsp;&emsp;附录B中的1、2部分主要介绍了JS在老版本浏览器中的语法和APIs（或者已经废弃的），但TC39并不打算将其纳入到JS规范中去，例如0-前缀的八进制表示法，全局对象属性<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/escape" target="_blank" rel="noopener">escape()</a>、<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/unescape" target="_blank" rel="noopener">unescape()</a>，string原型方法<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/anchor" target="_blank" rel="noopener">anchor()</a>和<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/blink" target="_blank" rel="noopener">blink()</a>，RegExp 中的<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp/compile" target="_blank" rel="noopener">compile()</a>等等。</p>
+<p>&emsp;&emsp;第3部分主要包含一些因运行不同环境而产生的冲突（Web和非Web环境），除了因行为不同而产生不同结果的地方。在严格模式下大多数包含这种情况的错误，都会及时的以列表的形式展现出来。</p>
+<p>&emsp;&emsp;附录B中的一些问题并不是经常遇到，但是从长远角度来讲这是一个很好的方案来避免这些问题。所以我们尽量遵循JS规范，并且不要针对单一的JS运行环境而做一些行为。</p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://yoursite.com/2020/06/02/YDK-JS-2nd-01/" data-id="ckb8paqln000gf4umfhrfdbm5" class="article-share-link">
+                                            Share
+                                        </a>
+                                        
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/06/01/micro-web/" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">micro-web</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 Hexo</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/categories">分类</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>
