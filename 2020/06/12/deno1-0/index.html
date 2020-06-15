@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    deno1.0 |
+    
+    Hexo</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<script src="/js/pace.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  <article id="post-deno1-0" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+  
+    <h1 class="article-title" itemprop="name">
+      deno1.0
+    </h1>
+  
+  
+
+
+
+
+            </header>
+            
+
+                
+                    <div class="article-meta">
+                        <a href="/2020/06/12/deno1-0/" class="article-date">
+  <time datetime="2020-06-12T02:05:14.000Z" itemprop="datePublished">2020-06-12</time>
+</a>
+                            
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/node/">Node</a>
+  </div>
+
+                    </div>
+                    
+
+                        
+                            
+    <div class="tocbot"></div>
+
+
+
+
+
+                                
+
+                                    <div class="article-entry" itemprop="articleBody">
+                                        
+
+
+                                            
+
+                                                
+                                                                    <h2 id="Deno1-0"><a href="#Deno1-0" class="headerlink" title="Deno1.0"></a>Deno1.0</h2><p><a href="https://zh.wikipedia.org/wiki/动态语言" target="_blank" rel="noopener">动态编程语言</a>是非常有用的工具，脚本语言允许用户可以快速而简洁的将业务逻辑与复杂的系统联系在一起，而不用关系内存管理和系统构建的细节。在近几年的编程语言中，像<code>Rust</code>和<code>Go</code>可以更简单的编写复杂的原生机器代码。这些是计算机基础设施发展的的非常重要的组成部分。然而，我们知道如果你需要解决各式各样问题，那么一个可执行脚本环境是非常重要的。</p>
+<a id="more"></a>
+
+<p>Javascript是一个应用最为广泛的动态语言，应用于所有具备浏览器的设备操作中。大部分精通Javascript的程序员，致力于脚本执行优化的工作。通过官方 ECMA 组织的维护，这门语言也在持续不断认真的改进。我们相信Javascript在动态语言工具中将会是最好的选择，无论是在浏览器还是在单独的进程中。</p>
+<p>我们在这个领域最初的作品，Node.js证明了，这是一个非常成功的软件平台，人们可以通过它来构建开发者工具，构建独立的web服务等等。然而，Node是在2009年被设计，也就是那时的Javascript与现在的有很大的不同。某种程度上讲，Node也必须拥抱这些变化，在<a href="https://www.youtube.com/watch?v=M3BM9TB-8yA" target="_blank" rel="noopener">Node 设计缺陷</a>演示中，大部分也被提及。由于Node有庞大的用户体系，使其这个体系发展也是困难重重。</p>
+<p>随着Javascript语言的发展，对于JS的缺陷也出现了一些新的解决方案，像Typescript。构建一个Node应用开始变得困难，包括管理系统和一些大型工具库，都远离了动态语言编程的乐趣。此外连接第三方库的机制是通过NPM仓库进行集中管理，这与web的理念相悖。</p>
+<p>我们认为Javascript和其周边的软件基础设施发生了太多的改变，以至于非常值得去简化它。我们寻求一个有趣的并有成效的脚本环境来进行大范围的任务。</p>
+<h2 id="A-Web-Browser-for-Command-Line-Scripts"><a href="#A-Web-Browser-for-Command-Line-Scripts" class="headerlink" title="A Web Browser for Command-Line Scripts"></a>A Web Browser for Command-Line Scripts</h2><p>Deno 是一个新的可以在浏览器之外运行JS和TS的执行环境。</p>
+<p>Deno试图提供一个工具来优化复杂的脚本执行时间，它是（并且一直是）一个单独的可执行文件。比如浏览器，它可以获取外部脚本文件。在Deno中可以通过单独文件的定义而不借助其他工具来实现任意复杂的应用逻辑。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import &#123; serve &#125; from &quot;https:&#x2F;&#x2F;deno.land&#x2F;std@0.50.0&#x2F;http&#x2F;server.ts&quot;;</span><br><span class="line"></span><br><span class="line">for await (const req of serve(&#123; port: 8000 &#125;)) &#123;</span><br><span class="line">  req.respond(&#123; body: &quot;Hello World\n&quot; &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里通过一行代码将完整的HTTP模块作为依赖引用进来。没有额外的配置文件，也不需要提前安装模块，只需运行<code>deno run example.js</code></p>
+<p>在浏览器中，代码的执行环境默认放在安全沙箱中。脚本无权访问硬盘、网络连接或者其他非法的恶意操作。如需访问相机、麦克风等浏览器提供的Apis，则需要先询问用户是否赋予权限。Deno同样在终端提供类似的行为。如果命令行未提供<code>--allow-net</code>标识，则上边的例子将运行失败。</p>
+<p>Deno尽可能保证不偏离浏览器中Javascript Apis 相关规范。当然，并不是每个浏览器Api都与Deno有关，Deno也不会偏离标准。</p>
+<h2 id="First-Class-TypeScript-Support"><a href="#First-Class-TypeScript-Support" class="headerlink" title="First Class TypeScript Support"></a>First Class TypeScript Support</h2><p>我们希望Deno能够广泛应用于各种问题领域：从小型单行脚本到复杂的服务器端业务逻辑。随着程序越来越复杂，进行一些类型检查显得尤为重要。TS是JS语言的超集，它允许用户提供随意的类型信息。</p>
+<p>Deno不需要额外的工具就能支持TS，它的设计参考TS的设计思想。<code>deno types</code>命令给deno提供了类型声明，他的内置模块都是基于TS实现的。</p>
+<h2 id="Promises-All-The-Way-Down"><a href="#Promises-All-The-Way-Down" class="headerlink" title="Promises All The Way Down"></a>Promises All The Way Down</h2><p>Node在设计之初，JS是没有Promise、async/await概念的，node中通过 EventEmitter类 实现类似promises，它是基于sockets 和 HTTP的重要APIs。先不考虑async/await所带来的好处，EventEmitter在数据处理过程中会带来<a href="https://nodejs.org/zh-cn/docs/guides/backpressuring-in-streams/" target="_blank" rel="noopener">背压</a>的问题，取一个 TCP 的 socket例子。当它接收到数据时，会发布一个”data”事件。这些“data”会没有限制的发布，导致进程数据量会越来越多。因为Node还需要继续接收新的发布事件，底层的TCP也没有适当的背压，发送方又不知道远程服务器已经负载并继续发送消息。为了缓解这个问题，新增了<code><a href="https://nodejs.org/api/stream.html#stream_event_pause" target="_blank" rel="noopener">pause()</a></code>方法。因为这类问题只出现在服务器非常繁忙的情况下，很多Node程序将被大量的data事件占满，最终导致系统较高的延迟。</p>
+<p>在Deno中，sockets 同样是异步的，但是需要通过<code>read()</code>明确的指出是否接受新的数据。不需要再额外的 <code>pause<code>，它并不是只针对TCP sockets设计的。The lowest level binding layer to the system is fundamentally tied to promises - we call these bindings "ops". All callbacks in Deno in some form or another arise from promises.</p>
+<p>Rust有类似与promise的抽象类，叫做Futures。通过“op”，Deno可以很容易的将Rust中Futures与Javascript的promise结合起来。</p>
+<h2 id="Rust-APIs"><a href="#Rust-APIs" class="headerlink" title="Rust APIs"></a>Rust APIs</h2><p>我们提供的主要组件就是Deno的命令界面（CLI），目前是1.0版本，他并不是一个庞大的程序，被设计成Rust的集合，并应用再不同的层。</p>
+<p><a href="https://deno.land/v1" target="_blank" rel="noopener">原文地址</a></p>
+
+                                                                        
+                                    </div>
+                                    <footer class="article-footer">
+                                        <a data-url="http://yoursite.com/2020/06/12/deno1-0/" data-id="ckbgbtkcr00004oumcilh0xyg" class="article-share-link">
+                                            Share
+                                        </a>
+                                        
+                                    </footer>
+
+    </div>
+
+    
+        
+  <nav class="article-nav">
+    
+    
+      <a href="/2020/06/02/YDK-JS-2nd-01/" class="article-nav-link">
+        <strong class="article-nav-caption">Older</strong>
+        <div class="article-nav-title">第一章 什么是JavaScript?</div>
+      </a>
+    
+  </nav>
+
+
+            
+
+                
+                    
+                        
+                            
+
+</article>
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+    <li><i class="fe fe-bookmark"></i> <span id="busuanzi_value_page_pv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2020 Hexo</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+<aside class="sidebar">
+  <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/categories">分类</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+</aside>
+
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+  
+<script src="/js/tocbot.min.js"></script>
+
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+
+<script src="/js/ocean.js"></script>
+
+
+</body>
+</html>
