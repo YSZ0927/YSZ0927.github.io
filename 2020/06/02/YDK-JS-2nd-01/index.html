@@ -130,15 +130,43 @@
 <p>这取决于个人的理解，<code> alert() </code>方法并不在JS规范中，但是它存在于运行 JS 的 所有 Web 环境中，然而，你也不会在附录B中找到它的说明。</p>
 <p>各式各样的JS运行环境（浏览器，Node.js等）会将Api放在全局作用域中，提供一些特殊的能力，就像浏览器中存在alert弹窗一样。</p>
 <p>实际上，有大部分Apis只是看起来像JS，像 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch" target="_blank" rel="noopener">fetch()</a>、<a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition" target="_blank" rel="noopener">getCurrentPosition()</a>和<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/MediaDevices/getUserMedia" target="_blank" rel="noopener">getUserMedia()</a>实际上都是 Web’s Api。在Node.js中同样在模块中提供数以百计的Api，比如 fs.write()。</p>
-<p>另外还有<code> console.log() </code>（或者其他console.*方法），都不是JS规范的内容，但是因为他们普遍的应用于运行JS的环境中。所以粗略的认为与JS是一致的。</p>
+<p>另 外还有<code> console.log() </code>（或者其他console.*方法），都不是JS规范的内容，但是因为他们普遍的应用于运行JS的环境中。所以粗略的认为与JS是一致的。</p>
 <p>所以<code>alert(..)</code>和<code>console.log(..)</code>，都不属于JS规范内容，只不过看上去像。这些方法遵循JS语法规范。它们的行为由JS引擎控制，而且必须遵循JS规范才能在JS运行背景下工作。</p>
 <p>人们总是抱怨在大部分跨浏览器运行JS时所出现的行为结果不一致，实际上这些问题由不同的运行环境导致，而并非JS本身的问题。</p>
 <p>所以，<code>alert(..)</code>在JS中被调用，但是<code>alert</code>真的只是JS的一个 guest ，并不是JS规范里的内容。</p>
-<h3 id="It’s-Not-Always-JS"><a href="#It’s-Not-Always-JS" class="headerlink" title="It’s Not Always JS"></a>It’s Not Always JS</h3>
+<h3 id="It’s-Not-Always-JS"><a href="#It’s-Not-Always-JS" class="headerlink" title="It’s Not Always JS"></a>It’s Not Always JS</h3><h3 id="Many-Faces"><a href="#Many-Faces" class="headerlink" title="Many Faces"></a>Many Faces</h3><p>在编程语言上下文中，术语“范例”指的是构建代码的一种广泛的（几乎是通用的）思维方式和方法。在一个范例中，有无数区分程序的样式和形式的变化，包括无数的lib。</p>
+<p>但是，无论一个程序的风格是怎样的，在第一眼看到任何程序时，围绕范例的大划分总是显而易见的。</p>
+<p>典型的范例级代码属于程序类别，像OO（面向对象程序设计）、FP（函数式程序设计）：</p>
+<ul>
+<li><p>程序风格通过一组预先确定的操作（通常在成为过程的相关单元中收集）以自顶向下、线性的方式组织代码。</p>
+</li>
+<li><p>OO风格 通过将逻辑与数据一起收集到称为类的单元中组织代码。</p>
+</li>
+<li><p>FP风格将代码组织成函数（纯计算而不是过程），并将这些函数的调整作为值。</p>
+</li>
+</ul>
+<p>范式既不是对的也不是错的。它们是指导和塑造程序员如何处理的解决方案、如何狗仔和维护代码的方向。</p>
+<p>有些语言严重倾向于一种范式——C是面向过程，Java/C++几乎完全面向类的，而Haskell则完全面向FP。</p>
+<p>但是许多语言也支持来自不同范例的代码模式，甚至混合和匹配来自不同范例。所谓的“多范式语言”提供了极大的灵活性。在某些情况下，一个程序甚至可以同时拥有这些范例的两个或多个表达式。</p>
+<p>Javascript绝对是一种多范式语言。您可以编写过程性的、面向类的或FP风格的代码，并且您可以逐行做出这些决定，而不是被迫做出要么全有要么全无的选择。</p>
+<h3 id="Backwards-amp-Forwards"><a href="#Backwards-amp-Forwards" class="headerlink" title="Backwards &amp; Forwards"></a>Backwards &amp; Forwards</h3><p>Javascript的最基本原则之一是保持backwards compatibility（向后兼容性）。许多人对这个术语的含义感到困惑，经常将他与一个相关但不同的术语混淆：（forwards compatibility）向前兼容性。</p>
+<p>让我们仔细研究下。</p>
+<p>向后兼容性意味着一旦某些东西被接受为有效的JS，将来就不会有导致代码成为无效JS的语言改变。1995年的编写的代码———无论多么原始、限制，今天还可以工作，正如TC39成员经常宣称的那样，“我们不会破坏网络！”</p>
+<p>这样也就意味着，JS开发者可以满怀信心的编写代码，他们的代码不会因为浏览器更新而不可预测的停止工作。这也使得为一个项目选择JS，在未来几年是一个更加明智和安全的投资。</p>
+<p>这种“保证”可不是一件小事。在该语言近25年的历史中，保持向后兼容性带来了巨大的负担和一系列独特的挑战。在计算这种向后兼容性方面，很难找到许多其他例子。</p>
+<p>坚持这一原则的代价不应被随意忽略。它必然会为包括改变或拓展语言创造一个非常高的门槛；任何决定都会变成永久性的，包括错误在内。一旦它在JS中，它都不能被删除，因为它可能会破坏程序，即使我们真的很想删除它。</p>
+<p>这条规则也有一些小的例外。JS有一些向后不兼容的更改，但是TC39在这样做时非常谨慎。他们研究现有代码的web浏览器（通过数据采集）来估计这些破损的影响，和浏览器最终决定，投票决定是否他们愿意把热量从用户非常小规模的破损给人带来的修复或改善某些方面的语言更多的网站（和用户）。</p>
+<p>这些类型的变化是罕见的，而且几乎总是在较少的场景中使用，不太可能在许多网站上被明显破坏。</p>
+<p>比较向后与向前兼容性。向前兼容意味着，如果程序在旧的JS引擎中运行，那么程序中添加新的语言不会导致程序中断。然而JS并不是向前兼容，尽管许多人希望如此，甚至错误的认为它就是向前兼容。</p>
+<p>相比之下，HTML和CSS是向前兼容的，但是不向后兼容，如果你找到一些在1995年编写的HTML或CSS，它完全有可能在运行时出错。但是如果在2010年的浏览器中使用2019年的新特性，那么页面就不会“损坏” —— 未识别的CSS/HTML将被跳过，而其余的将被正确处理。</p>
+<p>在编程语言设计中包含向前兼容性似乎是可取的，但是这样做通常是不切实际的。标记（HTML）或层叠样式表（CSS）本质上是声明性的，因此“跳过”未识别的声明要容易的多，而且对其他已识别的声明影响最小。</p>
+<p>但是，如果编程语言引擎有选择的跳过它不理解的语句（甚至表达式），就会产生混乱和不确定性，因为不可能确保程序的后续部分不期望跳过的部分被处理。</p>
+<p>尽管JS不是，也不可能是向前兼容的，但认识到JS的向后兼容是至关重要的，包括它对web的持久好处以及它给JS带来的限制和困难。</p>
+
                                                                         
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="http://yoursite.com/2020/06/02/YDK-JS-2nd-01/" data-id="ckbkgzpst000gxcumbx3m85hu" class="article-share-link">
+                                        <a data-url="http://yoursite.com/2020/06/02/YDK-JS-2nd-01/" data-id="ckcjrlwzi000if8um4qi3aguz" class="article-share-link">
                                             Share
                                         </a>
                                         

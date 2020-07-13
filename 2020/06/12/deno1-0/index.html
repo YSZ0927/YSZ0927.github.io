@@ -91,7 +91,7 @@
 <p>这里通过一行代码将完整的HTTP模块作为依赖引用进来。没有额外的配置文件，也不需要提前安装模块，只需运行<code>deno run example.js</code></p>
 <p>在浏览器中，代码的执行环境默认放在安全沙箱中。脚本无权访问硬盘、网络连接或者其他非法的恶意操作。如需访问相机、麦克风等浏览器提供的Apis，则需要先询问用户是否赋予权限。Deno同样在终端提供类似的行为。如果命令行未提供<code>--allow-net</code>标识，则上边的例子将运行失败。</p>
 <p>Deno尽可能保证不偏离浏览器中Javascript Apis 相关规范。当然，并不是每个浏览器Api都与Deno有关，Deno也不会偏离标准。</p>
-<h2 id="First-Class-TypeScript-Support"><a href="#First-Class-TypeScript-Support" class="headerlink" title="First Class TypeScript Support"></a>First Class TypeScript Support</h2><p>我们希望Deno能够广泛应用于各种问题领域：从小型单行脚本到复杂的服务器端业务逻辑。随着程序越来越复杂，进行一些类型检查显得尤为重要。TS是JS语言的超集，它允许用户提供随意的类型信息。</p>
+<h2 id="支持TypeScript"><a href="#支持TypeScript" class="headerlink" title="支持TypeScript"></a>支持TypeScript</h2><p>我们希望Deno能够广泛应用于各种问题领域：从小型单行脚本到复杂的服务器端业务逻辑。随着程序越来越复杂，进行一些类型检查显得尤为重要。TS是JS语言的超集，它允许用户提供随意的类型信息。</p>
 <p>Deno不需要额外的工具就能支持TS，它的设计参考TS的设计思想。<code>deno types</code>命令给deno提供了类型声明，他的内置模块都是基于TS实现的。</p>
 <h2 id="Promises-All-The-Way-Down"><a href="#Promises-All-The-Way-Down" class="headerlink" title="Promises All The Way Down"></a>Promises All The Way Down</h2><p>Node在设计之初，JS是没有Promise、async/await概念的，node中通过 EventEmitter类 实现类似promises，它是基于sockets 和 HTTP的重要APIs。先不考虑async/await所带来的好处，EventEmitter在数据处理过程中会带来<a href="https://nodejs.org/zh-cn/docs/guides/backpressuring-in-streams/" target="_blank" rel="noopener">背压</a>的问题，取一个 TCP 的 socket例子。当它接收到数据时，会发布一个”data”事件。这些“data”会没有限制的发布，导致进程数据量会越来越多。因为Node还需要继续接收新的发布事件，底层的TCP也没有适当的背压，发送方又不知道远程服务器已经负载并继续发送消息。为了缓解这个问题，新增了<code><a href="https://nodejs.org/api/stream.html#stream_event_pause" target="_blank" rel="noopener">pause()</a></code>方法。因为这类问题只出现在服务器非常繁忙的情况下，很多Node程序将被大量的data事件占满，最终导致系统较高的延迟。</p>
 <p>在Deno中，sockets 同样是异步的，但是需要通过<code>read()</code>明确的指出是否接受新的数据。不需要再额外的 <code>pause<code>，它并不是只针对TCP sockets设计的。The lowest level binding layer to the system is fundamentally tied to promises - we call these bindings "ops". All callbacks in Deno in some form or another arise from promises.</p>
@@ -99,7 +99,7 @@
 <h2 id="Rust-APIs"><a href="#Rust-APIs" class="headerlink" title="Rust APIs"></a>Rust APIs</h2><p>我们提供的主要组件就是Deno的命令界面（CLI），目前是1.0版本，他并不是一个庞大的程序，被设计成Rust的集合，并应用再不同的层。</p>
 <p><a href="https://crates.io/crates/deno_core" target="_blank" rel="noopener">deno core</a>是Deno非常简单的版本，没有Typescript和<a href="https://tokio.rs/" target="_blank" rel="noopener">Tokio</a>依赖，仅仅给我们提供基础的资源库。例如将Rust中Futures与Javascript的promise结合起来的方法，CLI的构建完全基于deno_core。</p>
 <p><a href="https://crates.io/crates/rusty_v8" target="_blank" rel="noopener">rusty v8</a>是将Rust与V8 C++ API进行绑定，这个API尽可能的与原始C++ API接近。在Rust中暴露的对象正是c++中操作的对象。(例如，以前在Rust V8绑定上的尝试强制使用持久句柄)。并且提供了在Github中构建的二进制文件，它也允许用户从头编译V8并调整它的许多构建配置。所有V8源码，分布在这个库里。最后rusty_v8尝试成为安全的接口，虽然还不是100%安全，但已经是很接近了。能够以一种安全的方式与像V8这样复杂的VM交互，这让我们能够发现Deno本身存在难以发现的bug。</p>
-<h2 id="Stability"><a href="#Stability" class="headerlink" title="Stability"></a>Stability</h2><p>我们希望在Deno维护一个稳定的API，它有很多接口和组件，所以对于我们来说稳定且透明很重要，Javascript针对操作系统的API，都可以在Deno中找到（例如：<code>Deno.open()</code>），每一个都是谨慎改造，保证它的向后兼容的特性。</p>
+<h2 id="稳定性"><a href="#稳定性" class="headerlink" title="稳定性"></a>稳定性</h2><p>我们希望在Deno维护一个稳定的API，它有很多接口和组件，所以对于我们来说稳定且透明很重要，Javascript针对操作系统的API，都可以在Deno中找到（例如：<code>Deno.open()</code>），每一个都是谨慎改造，保证它的向后兼容的特性。</p>
 <p>所有尚未稳定的功能都通过在命令行最后添加<code>--unstable</code>隐藏掉了，你可以在<a href="https://doc.deno.land/https/raw.githubusercontent.com/denoland/deno/master/cli/js/lib.deno.unstable.d.ts" target="_blank" rel="noopener">这里</a>查看不稳定功能的接口文档，随着接口越来越稳定，我们会将它们暴露出来。</p>
 <p>在全局的命名空间中，你可以发现各式各样的Object（例如：<code>setTimeout()</code>、<code>fetch()</code>），我们尽量保证用法与浏览器保持一致，但是也会去修复不兼容的的特型。浏览器定义的标准而不是我们。所有的修正以修改bug形式发布，而不是改变接口。如果与浏览器标准不相符，那么在发布主要版本之前，都会将其解决。</p>
 <p>Deno包含许多Rust APIs，也就是deno core和rusty v8，目前都是1.0版本，后续会继续迭代。</p>
@@ -112,13 +112,12 @@
 <p>Deno是一个完全异步的服务，每秒25k的请求数量满足大部分场景（如果不满足，那可能不应该用Javascript来实现）。此外，由于普遍使用了promise(上面讨论过)，我们预计Deno通常会表现出更好的尾部延迟。尽管如此，我们相信该系统还有更多性能优势，我们希望在未来的版本中实现这一点。</p>
 <h2 id="TSC-瓶颈"><a href="#TSC-瓶颈" class="headerlink" title="TSC 瓶颈"></a>TSC 瓶颈</h2><p>在内部，Deno使用微软的TypeScript编译器来检查类型并生成JavaScript。与V8解析JavaScript所花费的时间相比，它非常慢。在项目的早期，我们希望“V8快照”能够提供显著的改进。快照当然有帮助，但它仍然很慢。我们当然认为可以在现有的TypeScript编译器的基础上做一些改进，但是很明显，类型检查最终需要在Rust中实现。这将是一项艰巨的任务，短期内不会开始;但它将在开发人员经历的关键路径上提供数量级的性能改进。TSC必须借助Rust。如果你有兴趣在这个问题上合作，请与我们联系。</p>
 <h2 id="插件-拓展"><a href="#插件-拓展" class="headerlink" title="插件/拓展"></a>插件/拓展</h2><p>我们有一个用于扩展Deno运行时的新插件系统。然而，该接口仍在开发中，并被标记为不稳定。因此，访问Deno提供的以外的本地系统是困难的。</p>
-<h2 id="Acknowledgements"><a href="#Acknowledgements" class="headerlink" title="Acknowledgements"></a>Acknowledgements</h2><p>Many thanks to the many contributors who helped make this release possible. Especially: @kitsonk who has had a massive hand in many parts of the system, including (but not limited to) the TypeScript compiler host, deno_typescript, deno bundle, deno install, deno types, streams implementation. @kevinkassimo has contributed countless bug fixes over the whole history of the project. Among his contributions are the timer system, TTY integration, wasm support. Deno.makeTempFile, Deno.kill, Deno.hostname, Deno.realPath, std/node’s require, window.queueMircotask, and REPL history. He also created the logo. @kt3k implemented the continuous benchmark system (which has been instrumental in almost every major refactor), signal handlers, the permissions API, and many critical bug fixes. @nayeemrmn contributes bug fixes in many parts of Deno, most notably he greatly improved the stack trace and error reporting, and has been a forceful help towards the stabilizing the APIs for 1.0. @justjavac has contributed many small but critical fixes to align deno APIs with web standards and most famously he wrote the VS Code deno plugin. @zekth has contributed a lot of modules to std, among them the std/encoding/csv, std/encoding/toml, std/http/cookies, as well as many other bug fixes. @axetroy has helped with all things related to prettier, contributed many bug fixes, and has maintained the VS Code plugin. @afinch7 implemented the plugin system. @keroxp implemented the websocket server and provided many bug fixes. @cknight has provided a lot of documentation and std/node polyfills. @lucacasonato built almost the entire deno.land website. @hashrock has done a lot of amazing artwork, like the loading page on doc.deno.land and the lovely image at the top of this page!</p>
 <p><a href="https://deno.land/v1" target="_blank" rel="noopener">原文地址</a></p>
 
                                                                         
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="http://yoursite.com/2020/06/12/deno1-0/" data-id="ckbkgzpsu000hxcumemgo0jto" class="article-share-link">
+                                        <a data-url="http://yoursite.com/2020/06/12/deno1-0/" data-id="ckcjrlwzl000jf8um4mpbgzdf" class="article-share-link">
                                             Share
                                         </a>
                                         
@@ -129,6 +128,15 @@
     
         
   <nav class="article-nav">
+    
+      <a href="/2020/07/05/webpack-loader/" class="article-nav-link">
+        <strong class="article-nav-caption">Newer</strong>
+        <div class="article-nav-title">
+          
+            webpack-loader
+          
+        </div>
+      </a>
     
     
       <a href="/2020/06/02/YDK-JS-2nd-01/" class="article-nav-link">
