@@ -162,11 +162,28 @@
 <p>在编程语言设计中包含向前兼容性似乎是可取的，但是这样做通常是不切实际的。标记（HTML）或层叠样式表（CSS）本质上是声明性的，因此“跳过”未识别的声明要容易的多，而且对其他已识别的声明影响最小。</p>
 <p>但是，如果编程语言引擎有选择的跳过它不理解的语句（甚至表达式），就会产生混乱和不确定性，因为不可能确保程序的后续部分不期望跳过的部分被处理。</p>
 <p>尽管JS不是，也不可能是向前兼容的，但认识到JS的向后兼容是至关重要的，包括它对web的持久好处以及它给JS带来的限制和困难。</p>
-<h3 id="Jumping-the-Gaps"><a href="#Jumping-the-Gaps" class="headerlink" title="Jumping the Gaps"></a>Jumping the Gaps</h3>
+<h3 id="Jumping-the-Gaps"><a href="#Jumping-the-Gaps" class="headerlink" title="Jumping the Gaps"></a>Jumping the Gaps</h3><p>由于JS不是向前兼容的，这意味着在你可以编写有效的JS代码和你的站点或应用程序需要支持最老的引擎之间总是存在潜在的差距。如果你在2016年的引擎中运行一个使用ES2019特性的程序。你可能看到程序崩溃。</p>
+<p>如果特性是一种新的语法，程序通常会完全无法编译和运行，通常会抛出语法错误。如果特性是API（比如ES6的Object.is(…)），程序可能运行到某个点，但随后抛出运行时异常，并在遇到对未知API的引用时停止。</p>
+<p>但这并不意味着JS开发人员应该始终落后于进度，只使用它们余姚支持的最老JS引擎环境的代码。</p>
+<p>但是这确实意味着JS开发人员需要特别注意解决这个差距。</p>
+<p>对于新的和不兼容的语法，解决方案是 transpiling。Transpiling是一个设计和社区发明的术语，用来描述使用工具将程序的全代码从一种形式转换成另一种形式（但仍然是作为文本的源代码）。通常，与语法相关的向前兼容性问题通过使用一个转换器（Babel）来解决。将新的语法转换为等效的旧语法。</p>
+<p>例如，开发人员可能会编写这样的代码片段：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">if (something) &#123;</span><br><span class="line">    let x &#x3D; 3;</span><br><span class="line">    console.log(x);</span><br><span class="line">&#125;</span><br><span class="line">else &#123;</span><br><span class="line">    let x &#x3D; 4;</span><br><span class="line">    console.log(x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这就是该应用程序的源代码树中的代码。但是，当生成文件部署到公共网站时，Babel就会将代码转换为如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var x$0, x$1;</span><br><span class="line">if (something) &#123;</span><br><span class="line">    x$0 &#x3D; 3;</span><br><span class="line">    console.log(x$0);</span><br><span class="line">&#125;</span><br><span class="line">else &#123;</span><br><span class="line">    x$1 &#x3D; 4;</span><br><span class="line">    console.log(x$1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>原始代码片段依赖于let在不互相干扰的if和else子句中创建作用域的x变量。Babel能够生成一个等效的程序（只需最少的重复工作）只是选择用唯一的名称命名两个不同的变量，从而产生相同的互不干扰的结果。</p>
+<blockquote>
+<p>Note：<br>在ES6（ES2015）中引入了关键字let。只有当应用程序需要在支持JS的pre-ES6环境中运行时，才需要应用前面的transpiling例子。这里的实例只是为了简单说明。当ES6刚刚出现时，这种置换的需求非常普遍，但是到了2020年，需要支持pre-ES6环境的需求就少得多了。因此，用于交换的“目标”是一个滑动的窗口，只有当决定站点/应用程序停止支持某些旧的浏览器引擎时，该滑动窗口才会向上移动。</p>
+</blockquote>
+<p>你可能想知道：为什么要麻烦地使用工具将较新的语法版本转换为较旧的版本呢？我们不能只写这两个变量，然后跳过let关键字吗？原因是，强烈建议开发人员使用最新版本的JS，这样它们的代码就会很干净，并且能最有效的交流思想。</p>
+<p>开发人员应该专注于编写干净的、新的语法形式，并让工具负责生成向前兼容的代码版本，该版本适合部署和运行在最古老的引擎环境中。</p>
+
                                                                         
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="http://yoursite.com/2020/06/02/YDK-JS-2nd-01/" data-id="ckclzj2eg000f90um1win6b91" class="article-share-link">
+                                        <a data-url="http://yoursite.com/2020/06/02/YDK-JS-2nd-01/" data-id="ckcxeg2hs000m04um225e58li" class="article-share-link">
                                             Share
                                         </a>
                                         
