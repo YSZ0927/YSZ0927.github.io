@@ -255,11 +255,50 @@
 <p>JS是像图1那样逐行解释的脚本，还是像编译语言那样在执行之前先经过一对多的处理(如图2和图3)?</p>
 <p>我认为在精神上，如果不是在实践中，JS是一种编译语言是很明显的。</p>
 <p>同样，重要的原因是，由于JS是编译的，所以在执行代码之前，我们会被告知静态错误(比如语法错误)。与传统的“脚本化”程序相比，这是一种实质上不同的交互模型，而且可以说更有帮助!</p>
-<h3 id="Web-Assembly-WASM"><a href="#Web-Assembly-WASM" class="headerlink" title="Web Assembly (WASM)"></a>Web Assembly (WASM)</h3>
+<h3 id="Web-Assembly-WASM"><a href="#Web-Assembly-WASM" class="headerlink" title="Web Assembly (WASM)"></a>Web Assembly (WASM)</h3><p>同如何更快的解析、编译和执行JS一样，促使JS性能上的进化是一个主要方面。</p>
+<p>2013年,来自Mozilla Firefox的工程师们演示了一个端口的虚幻3游戏引擎从C到JS。这个代码运行在一组特殊的JS引擎中，它具备浏览器的JS引擎能力，并且满60fps性能，属于一组优化引擎，它之所以可以执行是因为JS版本的虚幻引擎的代码风格的代码支持javascript语言的一个子集,名叫“ASM.js”。</p>
+<p>这个子集是有些不常见的正常编码的有效JS书面的方式,但一些重要信号输入信息引擎,允许它做优化的关键。JS的引入是为了解决JS运行时性能方面的压力。</p>
+<p>但是需要注意的是，ASM.js从来没有打算成为由开发人员编写的代码，而是从另一种语言(比如C)转换而来的程序的表示，在这种语言中，这些输入“注释”是由工具自动插入的。</p>
+<p>在ASM.js证明了工具创建的程序版本能够被JS引擎更高效地处理的有效性之后几年，另一组工程师(最初也是来自Mozilla)发布了Web Assembly (WASM)。</p>
+<p>WASM与ASM.js的相似之处在于，它最初的目的是为非JS程序(C等)提供一条路径，以便将其转换为可以在JS引擎中运行的格式。不像ASM。js, WASM选择另外绕过一些固有的延迟js解析/编译一个程序执行之前,代表项目以一种完全不同于js。</p>
+<p>WASM表示格式更接近于汇编(因此,它的名字),可以通过跳过处理JS引擎解析/编译通常JS引擎。解析/ WASM-targeted程序的编译发生提前(AOT);分布式是binary-packed程序准备JS引擎执行非常小的处理。</p>
+<p>WASM最初的动机显然是潜在的性能改进。尽管这仍然是一个焦点,WASM是另外的渴望驱使带来更多的平价没有js语言网络平台。例如，如果像Go这样的语言支持线程编程，而JS(语言)不支持，WASM提供了将这样的Go程序转换成JS引擎可以理解的形式的可能性，而不需要JS语言本身的线程特性。</p>
+<p>换句话说,WASM缓解压力将特性添加到JS大多/只打算使用transpiled程序从其他语言。这意味着JS功能开发可以判断(TC39)没有被利益倾斜/要求在其他语言生态系统,同时还让这些语言有一个可行的路径。</p>
+<p>有趣的是，关于WASM出现的另一个观点甚至与web (W)没有直接关系，WASM正在演变为一种跨平台虚拟机(VM)，程序可以在其中一次编译并在各种不同的系统环境中运行。</p>
+<p>所以,WASM不仅为网络,WASM也不是JS。具有讽刺意味的是,尽管WASM在JS引擎运行,JS语言是最不合适的语言之一WASM项目来源,因为WASM严重依赖静态类型信息。甚至TypeScript(TS)表面上,JS +静态类型不合适(目前)transpile WASM,尽管语言变体如AssemblyScript正试图桥JS / TS和WASM之间的差距。</p>
+<p>这本书不是WASM,所以我不会花更多的时间讨论它,除了最后一点。有些人建议WASM指向未来,JS是切除,或最小化,网络。这些人经常对JS怀有不良的情感,要一些其他语言语言!——取代它。WASM让其他语言在JS引擎运行以来,表面上这并不是一个完全的童话。</p>
+<p>但是让我明确一点:WASM将不会取代JS。WASM显著增强web(包括JS)可以完成什么。这是一件很棒的事情,完全正交是否有些人会把它作为一个逃生出口从编写JS。</p>
+<h3 id="Strictly-Speaking"><a href="#Strictly-Speaking" class="headerlink" title="Strictly Speaking"></a>Strictly Speaking</h3><p>回到2009年，在发布ES5的时候,JS添加严格模式作为鼓励更好的选择机制JS程序。</p>
+<p>严格模式所带来的好处远远大于成本,但旧习难改,现有(又名“遗留”)的惯性代码很难转变。如此可悲的是,十多年后,严格模式的可选性不一定意味着它仍然是默认为JS程序员。</p>
+<p>为什么严格模式?严格模式不应该被认为是限制你不能做什么,而是作为一个指南,最好的方法去做事情,这样JS引擎优化和有效地运行代码的最佳机会。大多数JS代码的工作团队的开发人员,所以严格的strict-ness模式(连同工具像棉绒!)经常帮助合作代码通过避免一些问题的错误在昨日的下跌,非严格模式。</p>
+<p>最严格的模式控制形式的早期错误,意思不是严格意义上的语法错误的错误但仍扔在编译时(在代码运行之前)。例如,严格模式不允许命名两个函数参数相同,和结果在早期错误。其他一些严格的模式控制只在运行时可观察到的,比如如何给<code>this</code>默认<code>undefined</code>而不是全局对象。</p>
+<p>而不是战斗和争吵与严格的模式,像一个孩子只是想挑战不管他们的父母告诉他们不要做什么,最好的心态是严格模式就像一个短绒提醒你应该如何编写JS有最高的质量和最好的机会在性能。如果你发现自己感觉戴上手铐,试图在严格模式下工作,这应该是一个刺耳的红色警告标记,你需要备份和反思整个方法。</p>
+<p>严格模式与一个特殊的编译指示打开每个文件(之前不允许评论/空格除外):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; only whitespace and comments are allowed</span><br><span class="line">&#x2F;&#x2F; before the use-strict pragma</span><br><span class="line">&quot;use strict&quot;;</span><br><span class="line">&#x2F;&#x2F; the rest of the file runs in strict mode</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>需要注意的是,即使是一只流浪<code>;</code>本身出现在严格模式编译指示将呈现编译指示无用的;不抛出错误,因为它是有效的JS有一个字符串表达式在一份声明中位置,但它也不会默默地打开严格模式!</p>
+</blockquote>
+<p>严格模式也可以适用范围,则对其环境完全相同的规则:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">function someOperations() &#123;</span><br><span class="line">    &#x2F;&#x2F; whitespace and comments are fine here</span><br><span class="line">    &quot;use strict&quot;;</span><br><span class="line"></span><br><span class="line">    &#x2F;&#x2F; all this code will run in strict mode</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>有趣的是,如果文件有严格的模式打开,函数层次严格模式语法是不允许的。所以你必须选择一个或另一个。</p>
+<p>唯一有效的理由使用方法严格模式则是当你转换现有的非严格模式程序文件,需要修改一点点。否则,轮到大大更好只是严格的模式在整个文件/程序。</p>
+<p>许多人想知道的时候会有JS做严格模式默认?答案是,几乎可以肯定不是。正如我们前面所讨论的向后兼容性,如果一个JS引擎更新开始假设代码严格模式即使它不是,这是可能的,这段代码将打破由于严格模式的控制。</p>
+<p>然而,有几个因素,减少未来影响非严格的“obscurity”模式。</p>
+<p>一方面,几乎所有transpiled代码最终在严格模式下即使原始源代码不是这样写的。大多数JS代码transpiled在生产,这意味着大多数JS已经坚持严格的模式。假设可以撤销,但你真的需要出去,这是极不可能的。</p>
+<p>此外,广泛发生转向更多/大多数新JS代码使用ES6模块格式写的。ES6模块承担严格的模式,因此所有代码在这些文件是严格模式自动违约。</p>
+<p>综上所述,严格模式在很大程度上是实际违约,即使技术上其实不是默认。</p>
+<h3 id="Defined"><a href="#Defined" class="headerlink" title="Defined"></a>Defined</h3><p>JS是一个ECMAScript标准的实现(版本ES2019在撰写本文时),是由TC39委员会指导下,由ECMA主持。它运行在浏览器和其他JS环境如node.JS。</p>
+<p>JS是一种多范型的语言,语法意义和功能允许开发人员混合和匹配(弯曲和重塑!)概念从不同的主要范式,如程序、面向对象(OO /类)和功能(FP)。</p>
+<p>JS是一个编译语言,这意味着工具(包括JS引擎)过程和验证程序(报告任何错误!)之前执行。</p>
+<p>现在我们的语言定义,让我们开始了解它的来龙去脉。</p>
+<p>【附录B】2019年ECMAScript语言规范附录B:额外的ECMAScript特性的Web浏览器,<a href="https://www.ecma-international.org/ecma-262/10.0/#sec-additional-ecmascript-features-for-web-browsers" target="_blank" rel="noopener">https://www.ecma-international.org/ecma-262/10.0/#sec-additional-ecmascript-features-for-web-browsers</a></p>
+
                                                                         
                                     </div>
                                     <footer class="article-footer">
-                                        <a data-url="http://yoursite.com/2020/06/02/YDK-JS-2nd-01/" data-id="ckd2zcbrl000mokumhaj86iee" class="article-share-link">
+                                        <a data-url="http://yoursite.com/2020/06/02/YDK-JS-2nd-01/" data-id="ckdhetu1x000m1cum0f1n2xtw" class="article-share-link">
                                             Share
                                         </a>
                                         
